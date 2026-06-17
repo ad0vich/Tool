@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tool</title>
+  <link rel="stylesheet" href="css/style.css?v=71">
+</head>
+<body>
+
+  <!-- SPLASH / LOADING SCREEN -->
+  <div class="splash" id="splashScreen">
+    <div class="splash-logo-wrap">
+      <div class="splash-logo-scene">
+        <div class="splash-logo-layers" id="splashLogoLayers"></div>
+      </div>
+      <div class="splash-fill-track">
+        <div class="splash-fill-bar" id="splashFillBar"></div>
+      </div>
+      <div class="splash-text" id="splashText">Loading...</div>
+    </div>
+  </div>
+
+
+
+  <!-- CHANGELOG MODAL -->
+  <div class="changelog-overlay hidden" id="changelogOverlay">
+    <div class="changelog-modal">
+      <div class="changelog-header">
+        <span class="changelog-title">Updates</span>
+        <button class="changelog-close" id="changelogClose">&times;</button>
+      </div>
+      <div class="changelog-body" id="changelogBody">
+        <div class="cl-empty">Checking for updates...</div>
+      </div>
+      <div class="changelog-footer hidden" id="changelogFooter">
+        <button class="changelog-update-btn" id="installUpdateBtn">Install Update</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER with 3D logo -->
+  <div class="header-bar">
+    <button class="header-version-btn" id="versionBtn" title="Version & Updates">
+      <span id="versionText">v1.2.0</span>
+      <span class="update-badge hidden" id="updateBadge"></span>
+    </button>
+  </div>
+  <div class="logo3d-scene" id="logo3dScene">
+    <div class="logo3d-layers" id="logo3dLayers"></div>
+  </div>
+
+  <!-- TAB NAV — MAIN · GRAPHS · MOTION · SHAKES -->
+  <div class="tab-nav">
+    <button class="tab-btn active" data-tab="main">MAIN</button>
+    <button class="tab-btn"        data-tab="speed">GRAPHS</button>
+    <button class="tab-btn"        data-tab="motion">MOTION</button>
+    <button class="tab-btn"        data-tab="shakes">SHAKES</button>
+  </div>
+
+  <!-- ══ TAB: MAIN ════════════════════════════════════════════ -->
+  <div class="tab-panel active" id="tab-main">
+
+    <!-- Anchor + Add Layer + Beat Markers (single block, three columns) -->
+    <div class="section main-block" data-block="anchor_add">
+      <div class="main-top-row main-top-row-with-beats">
+        <div class="main-left-col">
+          <div class="section-title">ANCHOR</div>
+          <div class="anchor-grid main-anchor-grid">
+            <button class="anchor-btn" data-pos="0" title="Top Left"></button>
+            <button class="anchor-btn" data-pos="1" title="Top Center"></button>
+            <button class="anchor-btn" data-pos="2" title="Top Right"></button>
+            <button class="anchor-btn" data-pos="3" title="Middle Left"></button>
+            <button class="anchor-btn anchor-center" data-pos="4" title="Center"></button>
+            <button class="anchor-btn" data-pos="5" title="Middle Right"></button>
+            <button class="anchor-btn" data-pos="6" title="Bottom Left"></button>
+            <button class="anchor-btn" data-pos="7" title="Bottom Center"></button>
+            <button class="anchor-btn" data-pos="8" title="Bottom Right"></button>
+          </div>
+        </div>
+        <div class="main-right-col">
+          <div class="section-title">ADD LAYER</div>
+          <div class="main-add-grid">
+            <button class="add-btn add-null  main-add-btn" id="mainBtnNull">NULL</button>
+            <button class="add-btn add-null  main-add-btn" id="mainBtnNullP">NULL +P</button>
+            <button class="add-btn add-adj   main-add-btn" id="mainBtnAdj">ADJ</button>
+            <button class="add-btn add-solid main-add-btn" id="mainBtnSolid">SOLID</button>
+          </div>
+        </div>
+        <div class="main-beats-col">
+          <div class="section-title">BEATS</div>
+          <div class="main-beats-stack">
+            <button class="btn-beats-place" data-target="main" title="Detect peaks in the comp's audio and drop comp markers">PLACE BEATS</button>
+            <button class="btn-beats-clear" data-target="main" title="Remove all composition markers">CLEAR</button>
+            <button class="btn-beats-settings" data-target="main" title="Beat Detection settings">
+              <span class="beats-sens-label" id="beatsSensLabelMain">1</span>
+              <svg viewBox="0 0 16 16" width="12" height="12"><path d="M8 4.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zM6 8a2 2 0 114 0 2 2 0 01-4 0z" fill="currentColor"/><path d="M8 1a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 1zm0 11a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 12zm7-4a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0115 8zM4 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 014 8zm9.95-3.54a.75.75 0 010 1.06l-1.06 1.06a.75.75 0 01-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zM4.17 9.42a.75.75 0 010 1.06l-1.06 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm9.36 3.12a.75.75 0 01-1.06 0l-1.06-1.06a.75.75 0 111.06-1.06l1.06 1.06a.75.75 0 010 1.06zM4.17 6.58a.75.75 0 01-1.06 0l-1.06-1.06a.75.75 0 011.06-1.06l1.06 1.06a.75.75 0 010 1.06z" fill="currentColor"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="beats-popup" id="beatsPopupMain">
+        <div class="beats-popup-title">Beat Detection</div>
+        <div class="beats-popup-row">
+          <span>Sensitivity</span>
+          <input type="range" data-target="main" class="beats-sens-input" min="1" max="10" value="1">
+          <span class="beats-popup-val" id="beatsSensValMain">1</span>
+        </div>
+        <div class="beats-popup-row">
+          <span>Density</span>
+          <select data-target="main" class="select-input beats-density-input">
+            <option value="1">Every beat</option>
+            <option value="2">Every 2nd</option>
+            <option value="4">Every 4th</option>
+            <option value="8">Every 8th</option>
+          </select>
+        </div>
+        <div class="beats-popup-row">
+          <span>Lead (frames)</span>
+          <input type="range" class="beats-lead-input" min="-5" max="20" value="3">
+          <span class="beats-popup-val beats-lead-val">3</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Curves -->
+    <div class="section main-block" data-block="curves">
+      <div class="main-curves-hdr">
+        <div class="section-title" style="margin:0">CURVES</div>
+        <div class="main-curves-legend">
+          <span class="legend-dot" style="background:var(--orange)"></span><span class="label-sm">VALUE</span>
+          &nbsp;
+          <span class="legend-dot" style="background:var(--blue)"></span><span class="label-sm">SPEED</span>
+        </div>
+      </div>
+      <div class="main-curves-row">
+        <div class="main-curve-group" id="mainValueCurves"></div>
+        <div class="main-curve-sep"></div>
+        <div class="main-curve-group" id="mainSpeedCurves"></div>
+      </div>
+    </div>
+
+    <!-- Quick Shakes -->
+    <div class="section main-block" data-block="shakes">
+      <div class="section-title" style="margin-bottom:6px">SHAKES</div>
+      <div class="main-shakes-flash-row">
+        <div class="main-shakes-row" id="mainShakesRow"></div>
+        <button class="btn-main-flash" id="mainBtnFlash" title="Flash">⚡</button>
+      </div>
+    </div>
+
+    <!-- Warp Stabilizer + Zoom Transitions -->
+    <div class="section main-block" data-block="zoom">
+      <div class="warp-zoom-row">
+        <!-- Warp Stabilizer -->
+        <div class="warp-zoom-col">
+          <div class="section-title">Stabilizer</div>
+          <div class="warp-stab-bar">
+            <button class="btn-warp-stab" id="mainBtnWarpStab" title="Pre-comps layer if it has keyframes/expressions">STABILIZE</button>
+            <button class="btn-warp-settings" id="mainBtnWarpSettings" title="Settings">
+              <span class="warp-smooth-label" id="mainWarpSmoothLabel">50%</span>
+              <svg viewBox="0 0 16 16" width="12" height="12"><path d="M8 4.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zM6 8a2 2 0 114 0 2 2 0 01-4 0z" fill="currentColor"/><path d="M8 1a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 1zm0 11a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 12zm7-4a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0115 8zM4 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 014 8zm9.95-3.54a.75.75 0 010 1.06l-1.06 1.06a.75.75 0 01-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zM4.17 9.42a.75.75 0 010 1.06l-1.06 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm9.36 3.12a.75.75 0 01-1.06 0l-1.06-1.06a.75.75 0 111.06-1.06l1.06 1.06a.75.75 0 010 1.06zM4.17 6.58a.75.75 0 01-1.06 0l-1.06-1.06a.75.75 0 011.06-1.06l1.06 1.06a.75.75 0 010 1.06z" fill="currentColor"/></svg>
+            </button>
+          </div>
+        </div>
+        <!-- Zoom Transitions -->
+        <div class="warp-zoom-col">
+          <div class="section-title">Zoom</div>
+          <div class="zoom-grid">
+            <div class="zoom-group">
+              <button class="zoom-apply-btn" id="mainZoomIn">IN</button>
+              <button class="zoom-dir-btn active" data-zoom="in" data-dir="in">IN</button>
+              <button class="zoom-dir-btn" data-zoom="in" data-dir="out">OUT</button>
+            </div>
+            <div class="zoom-group">
+              <button class="zoom-apply-btn" id="mainZoomOut">OUT</button>
+              <button class="zoom-dir-btn active" data-zoom="out" data-dir="in">IN</button>
+              <button class="zoom-dir-btn" data-zoom="out" data-dir="out">OUT</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Main Warp Stabilizer Settings Popup -->
+      <div class="warp-stab-popup" id="mainWarpStabPopup">
+        <div class="warp-stab-title">Warp Stabilizer Settings</div>
+        <div class="warp-stab-row">
+          <span>Smoothness</span>
+          <input type="range" id="mainWarpSmooth" min="1" max="100" value="50">
+          <span class="warp-stab-val" id="mainWarpSmoothVal">50%</span>
+        </div>
+        <button class="btn-primary" id="mainWarpStabApplySettings" style="margin-top:6px;width:100%">Apply</button>
+      </div>
+    </div>
+
+    <!-- Align + Export -->
+    <div class="section main-block" data-block="align_export">
+      <div class="align-export-row">
+        <div class="align-export-left">
+          <div class="align-top-row" style="margin-bottom:5px">
+            <span class="section-title" style="margin:0">ALIGN</span>
+            <select id="mainAlignTarget" class="select-input main-align-select">
+              <option value="selection">Selection</option>
+              <option value="comp">Comp</option>
+            </select>
+          </div>
+          <div class="main-align-row" id="mainAlignRow">
+            <button class="align-btn main-align-btn" data-mode="left"    data-target="main" title="Align Left">
+              <svg viewBox="0 0 32 32" width="18" height="18"><rect x="4" y="4" width="2" height="24" fill="var(--orange)"/><rect x="6" y="8" width="10" height="6" rx="1" fill="var(--fg)"/><rect x="6" y="18" width="16" height="6" rx="1" fill="var(--fg)"/></svg>
+            </button>
+            <button class="align-btn main-align-btn" data-mode="hcenter" data-target="main" title="Align H Center">
+              <svg viewBox="0 0 32 32" width="18" height="18"><rect x="15" y="4" width="2" height="24" fill="var(--orange)"/><rect x="8" y="8" width="12" height="6" rx="1" fill="var(--fg)"/><rect x="5" y="18" width="18" height="6" rx="1" fill="var(--fg)"/></svg>
+            </button>
+            <button class="align-btn main-align-btn" data-mode="right"   data-target="main" title="Align Right">
+              <svg viewBox="0 0 32 32" width="18" height="18"><rect x="26" y="4" width="2" height="24" fill="var(--orange)"/><rect x="10" y="8" width="16" height="6" rx="1" fill="var(--fg)"/><rect x="16" y="18" width="10" height="6" rx="1" fill="var(--fg)"/></svg>
+            </button>
+            <button class="align-btn main-align-btn" data-mode="top"     data-target="main" title="Align Top">
+              <svg viewBox="0 0 32 32" width="18" height="18"><rect x="4" y="4" width="24" height="2" fill="var(--orange)"/><rect x="8" y="6" width="6" height="10" rx="1" fill="var(--fg)"/><rect x="18" y="6" width="6" height="16" rx="1" fill="var(--fg)"/></svg>
+            </button>
+            <button class="align-btn main-align-btn" data-mode="vcenter" data-target="main" title="Align V Center">
+              <svg viewBox="0 0 32 32" width="18" height="18"><rect x="4" y="15" width="24" height="2" fill="var(--orange)"/><rect x="8" y="9" width="6" height="12" rx="1" fill="var(--fg)"/><rect x="18" y="6" width="6" height="18" rx="1" fill="var(--fg)"/></svg>
+            </button>
+            <button class="align-btn main-align-btn" data-mode="bottom"  data-target="main" title="Align Bottom">
+              <svg viewBox="0 0 32 32" width="18" height="18"><rect x="4" y="26" width="24" height="2" fill="var(--orange)"/><rect x="8" y="10" width="6" height="16" rx="1" fill="var(--fg)"/><rect x="18" y="16" width="6" height="10" rx="1" fill="var(--fg)"/></svg>
+            </button>
+            <button class="align-btn main-align-btn" data-mode="distH"   data-target="main" title="Distribute H">
+              <svg viewBox="0 0 32 32" width="18" height="18"><rect x="4" y="4" width="2" height="24" fill="var(--orange)"/><rect x="26" y="4" width="2" height="24" fill="var(--orange)"/><rect x="12" y="9" width="5" height="14" rx="1" fill="var(--fg)"/></svg>
+            </button>
+            <button class="align-btn main-align-btn" data-mode="distV"   data-target="main" title="Distribute V">
+              <svg viewBox="0 0 32 32" width="18" height="18"><rect x="4" y="4" width="24" height="2" fill="var(--orange)"/><rect x="4" y="26" width="24" height="2" fill="var(--orange)"/><rect x="9" y="12" width="14" height="5" rx="1" fill="var(--fg)"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="align-export-right">
+          <button class="btn-secondary btn-export-frame" id="mainExportFrame">⬇ Export Frame</button>
+          <div class="export-frame-status" id="mainExportStatus"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /tab-main -->
+
+  <!-- Fixed edit layout button (MAIN only) -->
+  <button class="main-gear-btn" id="mainGearBtn" title="Customize layout">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+  </button>
+
+  <!-- MAIN Layout Config Modal -->
+  <div class="modal-overlay" id="layoutModal">
+    <div class="modal layout-modal">
+      <div class="layout-modal-title">Customize Layout</div>
+      <div class="layout-editor" id="layoutEditor">
+        <!-- built by JS: visual preview blocks -->
+      </div>
+      <div class="layout-hidden-label" id="layoutHiddenLabel" style="display:none">Hidden blocks (click to add):</div>
+      <div class="layout-hidden-blocks" id="layoutHiddenBlocks"></div>
+      <div class="modal-btns">
+        <button id="layoutCancelBtn" class="btn-secondary">Cancel</button>
+        <button id="layoutSaveBtn" class="btn-primary" style="margin-bottom:0;width:auto;flex:1">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Context menu for block content selection -->
+  <div class="block-ctx-menu" id="blockCtxMenu"></div>
+
+
+  <!-- ══ TAB: SPEED ══════════════════════════════════════════ -->
+  <div class="tab-panel" id="tab-speed">
+
+    <div class="graph-toggle">
+      <button class="graph-btn active" data-graph="value" id="btnValueGraph">Value Graph</button>
+      <button class="graph-btn"        data-graph="speed" id="btnSpeedGraph">Speed Graph</button>
+    </div>
+
+    <div class="preset-grid" id="presetGrid" data-graph="value">
+      <!-- built by JS -->
+    </div>
+
+    <!-- toolbar removed: left-click empty cell to save, right-click custom to delete -->
+    <div id="speedStatus" class="speed-status"></div>
+  </div><!-- /tab-speed -->
+
+
+  <!-- ══ TAB: MOTION ═════════════════════════════════════════ -->
+  <div class="tab-panel" id="tab-motion">
+
+    <div class="motion-toggle">
+      <button class="motion-sub-btn active" data-sub="basic">Basic</button>
+      <button class="motion-sub-btn"        data-sub="sorting">Sorting</button>
+    </div>
+
+    <!-- ── Sub: Basic ── -->
+    <div class="motion-sub-panel active" id="motion-basic">
+
+      <div class="section">
+        <div class="main-top-row main-top-row-with-beats">
+          <div class="main-left-col">
+            <div class="section-title">Anchor Point</div>
+            <div class="anchor-grid main-anchor-grid">
+              <button class="anchor-btn" data-pos="0" title="Top Left"></button>
+              <button class="anchor-btn" data-pos="1" title="Top Center"></button>
+              <button class="anchor-btn" data-pos="2" title="Top Right"></button>
+              <button class="anchor-btn" data-pos="3" title="Middle Left"></button>
+              <button class="anchor-btn anchor-center" data-pos="4" title="Center"></button>
+              <button class="anchor-btn" data-pos="5" title="Middle Right"></button>
+              <button class="anchor-btn" data-pos="6" title="Bottom Left"></button>
+              <button class="anchor-btn" data-pos="7" title="Bottom Center"></button>
+              <button class="anchor-btn" data-pos="8" title="Bottom Right"></button>
+            </div>
+          </div>
+          <div class="main-right-col">
+            <div class="section-title">Add Layer</div>
+            <div class="main-add-grid">
+              <button class="add-btn add-null  main-add-btn" id="btnNullOnly">NULL</button>
+              <button class="add-btn add-null  main-add-btn" id="btnNullParent">NULL +P</button>
+              <button class="add-btn add-adj   main-add-btn" id="btnAdjLayer">ADJ</button>
+              <button class="add-btn add-solid main-add-btn" id="btnSolid">SOLID</button>
+            </div>
+          </div>
+          <div class="main-beats-col">
+            <div class="section-title">Beats</div>
+            <div class="main-beats-stack">
+              <button class="btn-beats-place" data-target="motion" title="Detect peaks in the comp's audio and drop comp markers">PLACE BEATS</button>
+              <button class="btn-beats-clear" data-target="motion" title="Remove all composition markers">CLEAR</button>
+              <button class="btn-beats-settings" data-target="motion" title="Beat Detection settings">
+                <span class="beats-sens-label" id="beatsSensLabelMotion">1</span>
+                <svg viewBox="0 0 16 16" width="12" height="12"><path d="M8 4.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zM6 8a2 2 0 114 0 2 2 0 01-4 0z" fill="currentColor"/><path d="M8 1a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 1zm0 11a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 12zm7-4a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0115 8zM4 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 014 8zm9.95-3.54a.75.75 0 010 1.06l-1.06 1.06a.75.75 0 01-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zM4.17 9.42a.75.75 0 010 1.06l-1.06 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm9.36 3.12a.75.75 0 01-1.06 0l-1.06-1.06a.75.75 0 111.06-1.06l1.06 1.06a.75.75 0 010 1.06zM4.17 6.58a.75.75 0 01-1.06 0l-1.06-1.06a.75.75 0 011.06-1.06l1.06 1.06a.75.75 0 010 1.06z" fill="currentColor"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="beats-popup" id="beatsPopupMotion">
+          <div class="beats-popup-title">Beat Detection</div>
+          <div class="beats-popup-row">
+            <span>Sensitivity</span>
+            <input type="range" data-target="motion" class="beats-sens-input" min="1" max="10" value="1">
+            <span class="beats-popup-val" id="beatsSensValMotion">1</span>
+          </div>
+          <div class="beats-popup-row">
+            <span>Density</span>
+            <select data-target="motion" class="select-input beats-density-input">
+              <option value="1">Every beat</option>
+              <option value="2">Every 2nd</option>
+              <option value="4">Every 4th</option>
+              <option value="8">Every 8th</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Warp Stabilizer + Zoom Transitions -->
+      <div class="section">
+        <div class="warp-zoom-row">
+          <!-- Warp Stabilizer -->
+          <div class="warp-zoom-col">
+            <div class="section-title">Stabilizer</div>
+            <div class="warp-stab-bar">
+              <button class="btn-warp-stab" id="btnWarpStab" title="Pre-comps layer if it has keyframes/expressions">STABILIZE</button>
+              <button class="btn-warp-settings" id="btnWarpSettings" title="Settings">
+                <span class="warp-smooth-label" id="warpSmoothLabel">50%</span>
+                <svg viewBox="0 0 16 16" width="12" height="12"><path d="M8 4.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zM6 8a2 2 0 114 0 2 2 0 01-4 0z" fill="currentColor"/><path d="M8 1a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 1zm0 11a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 12zm7-4a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0115 8zM4 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 014 8zm9.95-3.54a.75.75 0 010 1.06l-1.06 1.06a.75.75 0 01-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zM4.17 9.42a.75.75 0 010 1.06l-1.06 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm9.36 3.12a.75.75 0 01-1.06 0l-1.06-1.06a.75.75 0 111.06-1.06l1.06 1.06a.75.75 0 010 1.06zM4.17 6.58a.75.75 0 01-1.06 0l-1.06-1.06a.75.75 0 011.06-1.06l1.06 1.06a.75.75 0 010 1.06z" fill="currentColor"/></svg>
+              </button>
+            </div>
+          </div>
+          <!-- Zoom Transitions -->
+          <div class="warp-zoom-col">
+            <div class="section-title">Zoom</div>
+            <div class="zoom-grid">
+              <div class="zoom-group">
+                <button class="zoom-apply-btn" id="btnZoomIn">IN</button>
+                <button class="zoom-dir-btn active" data-zoom="in" data-dir="in">IN</button>
+                <button class="zoom-dir-btn" data-zoom="in" data-dir="out">OUT</button>
+              </div>
+              <div class="zoom-group">
+                <button class="zoom-apply-btn" id="btnZoomOut">OUT</button>
+                <button class="zoom-dir-btn active" data-zoom="out" data-dir="in">IN</button>
+                <button class="zoom-dir-btn" data-zoom="out" data-dir="out">OUT</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Warp Stabilizer Settings Popup -->
+        <div class="warp-stab-popup" id="warpStabPopup">
+          <div class="warp-stab-title">Warp Stabilizer Settings</div>
+          <div class="warp-stab-row">
+            <span>Smoothness</span>
+            <input type="range" id="warpSmooth" min="1" max="100" value="50">
+            <span class="warp-stab-val" id="warpSmoothVal">50%</span>
+          </div>
+          <button class="btn-primary" id="warpStabApplySettings" style="margin-top:6px;width:100%">Apply</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="align-top-row">
+          <span class="label-sm">Align Layers to:</span>
+          <select id="alignTarget" class="select-input">
+            <option value="selection">Selection</option>
+            <option value="comp">Composition</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Align Layers</div>
+        <div class="align-grid">
+          <button class="align-btn" data-mode="left"    data-target="motion" title="Align Left Edges">
+            <svg viewBox="0 0 32 32" width="22" height="22"><rect x="4" y="4" width="2" height="24" fill="var(--orange)"/><rect x="6" y="8" width="10" height="6" rx="1" fill="var(--fg)"/><rect x="6" y="18" width="16" height="6" rx="1" fill="var(--fg)"/></svg>
+          </button>
+          <button class="align-btn" data-mode="hcenter" data-target="motion" title="Align Horizontal Centers">
+            <svg viewBox="0 0 32 32" width="22" height="22"><rect x="15" y="4" width="2" height="24" fill="var(--orange)"/><rect x="8" y="8" width="12" height="6" rx="1" fill="var(--fg)"/><rect x="5" y="18" width="18" height="6" rx="1" fill="var(--fg)"/></svg>
+          </button>
+          <button class="align-btn" data-mode="right"   data-target="motion" title="Align Right Edges">
+            <svg viewBox="0 0 32 32" width="22" height="22"><rect x="26" y="4" width="2" height="24" fill="var(--orange)"/><rect x="10" y="8" width="16" height="6" rx="1" fill="var(--fg)"/><rect x="16" y="18" width="10" height="6" rx="1" fill="var(--fg)"/></svg>
+          </button>
+          <button class="align-btn" data-mode="top"     data-target="motion" title="Align Top Edges">
+            <svg viewBox="0 0 32 32" width="22" height="22"><rect x="4" y="4" width="24" height="2" fill="var(--orange)"/><rect x="8" y="6" width="6" height="10" rx="1" fill="var(--fg)"/><rect x="18" y="6" width="6" height="16" rx="1" fill="var(--fg)"/></svg>
+          </button>
+          <button class="align-btn" data-mode="vcenter" data-target="motion" title="Align Vertical Centers">
+            <svg viewBox="0 0 32 32" width="22" height="22"><rect x="4" y="15" width="24" height="2" fill="var(--orange)"/><rect x="8" y="9" width="6" height="12" rx="1" fill="var(--fg)"/><rect x="18" y="6" width="6" height="18" rx="1" fill="var(--fg)"/></svg>
+          </button>
+          <button class="align-btn" data-mode="bottom"  data-target="motion" title="Align Bottom Edges">
+            <svg viewBox="0 0 32 32" width="22" height="22"><rect x="4" y="26" width="24" height="2" fill="var(--orange)"/><rect x="8" y="10" width="6" height="16" rx="1" fill="var(--fg)"/><rect x="18" y="16" width="6" height="10" rx="1" fill="var(--fg)"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Distribute Layers</div>
+        <div class="align-grid">
+          <button class="align-btn" data-mode="distH" data-target="motion" title="Distribute Horizontally">
+            <svg viewBox="0 0 32 32" width="22" height="22"><rect x="4" y="4" width="2" height="24" fill="var(--orange)"/><rect x="26" y="4" width="2" height="24" fill="var(--orange)"/><rect x="12" y="9" width="5" height="14" rx="1" fill="var(--fg)"/><path d="M8,16 L11,13 M8,16 L11,19" stroke="var(--fg2)" stroke-width="1.2" fill="none"/><path d="M20,16 L17,13 M20,16 L17,19" stroke="var(--fg2)" stroke-width="1.2" fill="none"/></svg>
+          </button>
+          <button class="align-btn" data-mode="distV" data-target="motion" title="Distribute Vertically">
+            <svg viewBox="0 0 32 32" width="22" height="22"><rect x="4" y="4" width="24" height="2" fill="var(--orange)"/><rect x="4" y="26" width="24" height="2" fill="var(--orange)"/><rect x="9" y="12" width="14" height="5" rx="1" fill="var(--fg)"/><path d="M16,8 L13,11 M16,8 L19,11" stroke="var(--fg2)" stroke-width="1.2" fill="none"/><path d="M16,20 L13,17 M16,20 L19,17" stroke="var(--fg2)" stroke-width="1.2" fill="none"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Export Frame -->
+      <div class="section">
+        <button class="btn-secondary btn-export-frame" id="motionExportFrame">⬇ Export Frame</button>
+        <div class="export-frame-status" id="motionExportStatus"></div>
+      </div>
+
+    </div><!-- /motion-basic -->
+
+    <!-- ── Sub: Sorting ── -->
+    <div class="motion-sub-panel" id="motion-sorting">
+
+      <div class="section">
+        <div class="section-title">FOLDER NAMES</div>
+        <div class="sort-folder-map">
+          <div class="sort-folder-row">
+            <span class="sort-folder-label">Video files</span>
+            <input type="text" class="sort-folder-input" id="sortFolderMedia" value="Media">
+          </div>
+          <div class="sort-folder-row">
+            <span class="sort-folder-label">Still images</span>
+            <input type="text" class="sort-folder-input" id="sortFolderImages" value="Images">
+          </div>
+          <div class="sort-folder-row">
+            <span class="sort-folder-label">Img sequences</span>
+            <input type="text" class="sort-folder-input" id="sortFolderSequences" value="Images/Sequences">
+          </div>
+          <div class="sort-folder-row">
+            <span class="sort-folder-label">Audio &gt; 10s</span>
+            <input type="text" class="sort-folder-input" id="sortFolderTracks" value="Music/Tracks">
+          </div>
+          <div class="sort-folder-row">
+            <span class="sort-folder-label">Audio &lt; 10s</span>
+            <input type="text" class="sort-folder-input" id="sortFolderSFX" value="Music/SFX">
+          </div>
+          <div class="sort-folder-row">
+            <span class="sort-folder-label">Solids &amp; Adj</span>
+            <input type="text" class="sort-folder-input" id="sortFolderAssets" value="Assets">
+          </div>
+          <div class="sort-folder-row">
+            <span class="sort-folder-label">Compositions</span>
+            <input type="text" class="sort-folder-input" id="sortFolderComps" value="Comp">
+          </div>
+          <div class="sort-folder-row">
+            <span class="sort-folder-label">Other comps</span>
+            <input type="text" class="sort-folder-input" id="sortFolderAdditional" value="Additional">
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <button class="btn-primary btn-run" id="btnSortProject">▶ SORT PROJECT</button>
+        <div id="sortStatus" class="sort-status"></div>
+      </div>
+
+    </div><!-- /motion-sorting -->
+
+  </div><!-- /tab-motion -->
+
+
+  <!-- ══ TAB: SHAKES ═════════════════════════════════════════ -->
+  <div class="tab-panel" id="tab-shakes">
+
+    <div class="section">
+      <label class="cb-row shake-flash-row">
+        <input type="checkbox" id="shakeFlash"> Flash on impact
+      </label>
+      <label class="cb-row shake-flash-row">
+        <input type="checkbox" id="shakeChroma"> Chromatic shift
+      </label>
+      <button class="btn-flash-standalone" id="btnFlashOnly">&#9889; FLASH</button>
+    </div>
+
+    <div class="section">
+      <div class="section-title">PRESETS</div>
+      <div class="shake-preset-grid" id="shakePresetGrid">
+        <!-- built by JS: 5 built-in + user presets + empty "+" cells -->
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">QUICK APPLY</div>
+      <div class="shake-apply-row">
+        <div class="shake-sliders-col">
+          <div class="shake-slider-field">
+            <span class="shake-slider-label">Horizontal <span class="shake-val" id="shakeHVal">0</span></span>
+            <input type="range" id="shakeH" min="0" max="200" value="0" class="shake-slider">
+          </div>
+          <div class="shake-slider-field">
+            <span class="shake-slider-label">Vertical <span class="shake-val" id="shakeVVal">0</span></span>
+            <input type="range" id="shakeV" min="0" max="200" value="0" class="shake-slider">
+          </div>
+          <div class="shake-slider-field">
+            <span class="shake-slider-label">Scale <span class="shake-val" id="shakeSVal">0</span></span>
+            <input type="range" id="shakeS" min="0" max="80" value="0" class="shake-slider">
+          </div>
+          <div class="shake-slider-field">
+            <span class="shake-slider-label">Warp <span class="shake-val" id="shakeWVal">0</span></span>
+            <input type="range" id="shakeW" min="0" max="100" value="0" class="shake-slider">
+          </div>
+          <div class="shake-slider-field">
+            <span class="shake-slider-label">Rotation <span class="shake-val" id="shakeRVal">0</span></span>
+            <input type="range" id="shakeR" min="0" max="160" value="0" class="shake-slider">
+          </div>
+          <div class="shake-slider-field">
+            <span class="shake-slider-label">Duration <span class="shake-val" id="shakeDurVal">10f</span></span>
+            <input type="range" id="shakeDur" min="4" max="60" value="10" class="shake-slider">
+          </div>
+        </div>
+        <div class="shake-preview-box" id="shakePreviewBox">
+          <video src="assets/shake_preview.mp4" muted loop autoplay playsinline class="shake-preview-video" id="shakePreviewVideo"></video>
+        </div>
+      </div>
+      <button class="btn-primary btn-run" id="btnApplyShake" style="margin-top:8px">▶ APPLY SHAKE</button>
+      <div id="shakeStatus" class="shake-status"></div>
+    </div>
+
+  </div><!-- /tab-shakes -->
+
+  <!-- Shake Save Modal -->
+  <div class="modal-overlay" id="shakeSaveModal">
+    <div class="modal-box" style="width:340px">
+      <div class="modal-title">Save Shake Preset</div>
+      <input type="text" id="shakeSaveName" class="modal-name-input" placeholder="Preset name" value="Custom">
+      <div class="shake-apply-row" style="margin-top:8px">
+        <div class="shake-sliders-col">
+          <div class="shake-slider-field">
+            <span class="shake-slider-label">Horizontal <span class="shake-val" id="shakeSaveHVal">0</span></span>
+            <input type="range" id="shakeSaveH" min="0" max="200" value="0" class="shake-slider">
+          </div>
+          <div class="shake-slider-field">
+            <span class="shake-slider-label">Vertical <span class="shake-val" id="shakeSaveVVal">0</span></span>
+            <input type="range" id="shakeSaveV" min="0" max="200" value="0" class="shake-slider">
+          </div>
+          <div class="shake-slider-field">
+            <span class="shake-slider-label">Scale <span class="shake-val" id="shakeSaveSVal">0</span></span>
+            <input type="range" id="shakeSaveS" min="0" max="80" value="0" class="shake-slider">
+          </div>
+          <div class="shake-slider-field">
+            <span class="shake-slider-label">Warp <span class="shake-val" id="shakeSaveWVal">0</span></span>
+            <input type="range" id="shakeSaveW" min="0" max="100" value="0" class="shake-slider">
+          </div>
+          <div class="shake-slider-field">
+            <span class="shake-slider-label">Rotation <span class="shake-val" id="shakeSaveRVal">0</span></span>
+            <input type="range" id="shakeSaveR" min="0" max="160" value="0" class="shake-slider">
+          </div>
+          <div class="shake-slider-field">
+            <span class="shake-slider-label">Duration <span class="shake-val" id="shakeSaveDurVal">10f</span></span>
+            <input type="range" id="shakeSaveDur" min="4" max="60" value="10" class="shake-slider">
+          </div>
+        </div>
+        <div class="shake-preview-box shake-preview-modal" id="shakeSavePreviewBox">
+          <video src="assets/shake_preview.mp4" muted loop autoplay playsinline class="shake-preview-video" id="shakeSavePreviewVideo"></video>
+        </div>
+      </div>
+      <div class="modal-btns" style="margin-top:10px">
+        <button class="modal-btn" id="shakeSaveCancelBtn">Cancel</button>
+        <button class="modal-btn primary" id="shakeSaveConfirmBtn">Save</button>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <!-- Save Preset Modal (Motion 4 style) -->
+  <div class="modal-overlay" id="saveModal">
+    <div class="modal save-modal">
+      <div class="save-curve-box">
+        <svg id="savePreviewSvg" viewBox="0 0 50 50" preserveAspectRatio="none"></svg>
+      </div>
+      <div class="save-controls">
+        <div class="save-slider-field">
+          <span class="save-slider-label">Out &#x203A;</span>
+          <input type="range" id="saveOutInf" min="1" max="99" value="33" class="save-slider">
+          <span class="save-inf-val" id="saveOutInfVal">33</span>
+        </div>
+        <div class="save-slider-field">
+          <span class="save-slider-label">&#x2039; In</span>
+          <input type="range" id="saveInInf" min="1" max="99" value="33" class="save-slider">
+          <span class="save-inf-val" id="saveInInfVal">33</span>
+        </div>
+        <div class="save-slider-field save-scale-field">
+          <span class="save-slider-label">In/Out</span>
+          <input type="range" id="saveScaleInf" min="-50" max="50" value="0" class="save-slider save-scale-slider">
+          <span class="save-inf-val" id="saveScaleVal">0</span>
+        </div>
+      </div>
+      <div class="save-name-row">
+        <input type="text" id="savePresetName" class="modal-input" value="Custom" maxlength="16" placeholder="Preset name">
+      </div>
+      <div class="modal-btns">
+        <button id="saveCancelBtn" class="btn-secondary">Cancel</button>
+        <button id="saveConfirmBtn" class="btn-primary" style="margin-bottom:0;width:auto;flex:1">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bezier Curve Editor Modal (Value Graph) -->
+  <div class="modal-overlay" id="bezierModal">
+    <div class="modal bezier-modal">
+      <div class="bezier-graph-area">
+        <canvas id="bezierCanvas" width="440" height="440"></canvas>
+      </div>
+      <div class="bezier-values" id="bezierValues">0.25, 0.00, 0.75, 1.00</div>
+      <div class="save-name-row">
+        <input type="text" id="bezierPresetName" class="modal-input" value="Custom" maxlength="16" placeholder="Preset name">
+      </div>
+      <div class="modal-btns">
+        <button id="bezierCancelBtn" class="btn-secondary">Cancel</button>
+        <button id="bezierSaveBtn" class="btn-primary" style="margin-bottom:0;width:auto;flex:1">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/license.js"></script>
+  <script src="js/updater.js?v=3"></script>
+  <script src="js/main.js?v=86"></script>
+</body>
+</html>
